@@ -8,9 +8,9 @@ GitHub Pages: https://jkawamata.github.io/saibaidasu/
 
 ## バージョン
 
-- 最新版: V1.02
+- 最新版: V1.03
 - 公開入口: `index.html`
-- 版保存ファイル: `saibaidas_v1.02.html`
+- 版保存ファイル: `saibaidas_v1.03.html`
 
 ## 主な機能
 
@@ -19,6 +19,7 @@ GitHub Pages: https://jkawamata.github.io/saibaidasu/
 - 2地点および過去年の横並び比較
 - 栽培期間の有効積算温度、積算降水量、推定日射量、低温遭遇時間
 - 3日以内の連続欠損を前後の観測値から補完し、補完日数を表示
+- 作物名から、栽培と4つの気象指標の関係をGoogleで新しいタブに検索
 
 表示にはインターネット接続が必要です。このアプリは気象庁の公式アプリではありません。
 
