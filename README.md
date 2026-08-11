@@ -8,9 +8,9 @@ GitHub Pages: https://jkawamata.github.io/saibaidasu/
 
 ## バージョン
 
-- 最新版: V1.01
+- 最新版: V1.02
 - 公開入口: `index.html`
-- 版保存ファイル: `saibaidas_v1.01.html`
+- 版保存ファイル: `saibaidas_v1.02.html`
 
 ## 主な機能
 
@@ -21,3 +21,7 @@ GitHub Pages: https://jkawamata.github.io/saibaidasu/
 - 3日以内の連続欠損を前後の観測値から補完し、補完日数を表示
 
 表示にはインターネット接続が必要です。このアプリは気象庁の公式アプリではありません。
+
+## ライセンス
+
+CC BY。作者表記を残したうえで、改変・再配布できます。
