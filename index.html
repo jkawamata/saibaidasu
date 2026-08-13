@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#f4f7f1">
-  <meta name="application-version" content="1.47">
+  <meta name="application-version" content="1.50">
   <meta name="license" content="CC BY">
   <meta name="description" content="気象庁アメダスの観測値と栽培期間の気象指標を見渡せるダッシュボード">
-  <title>栽培ダス V1.47 — 栽培気象ダッシュボード</title>
+  <title>栽培ダス V1.50 — 栽培気象ダッシュボード</title>
   <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap');
 
@@ -109,6 +109,11 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .chevron { color: var(--muted); }
 .refresh-button { min-width: 112px; height: 48px; padding: 0 15px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #9fb7a8; border-radius: 13px; background: rgba(255,255,252,.9); color: var(--green); font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: .2s ease; }
 .refresh-button:hover { border-color: var(--green-2); background: #fff; box-shadow: 0 8px 20px rgba(36,56,44,.08); transform: translateY(-1px); }
+.home-button { width: 48px; height: 48px; padding: 0; display: none; align-items: center; justify-content: center; border: 1px solid #155b45; border-radius: 13px; background: var(--green); box-shadow: 0 7px 18px rgba(31,105,79,.2); color: white; cursor: pointer; transition: .2s ease; }
+.home-button.visible { display: inline-flex; }
+.home-button:hover { border-color: #0f4a38; background: #165a45; box-shadow: 0 9px 22px rgba(31,105,79,.3); transform: translateY(-1px); }
+.home-button:focus-visible { outline: 3px solid rgba(86,177,130,.32); outline-offset: 3px; }
+.home-button svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .print-button { display: flex; align-items: center; justify-content: center; gap: 7px; height: 48px; padding: 0 15px; border: 1px solid var(--line); border-radius: 13px; background: rgba(255,255,252,.82); color: var(--green); font-size: 11px; font-weight: 700; cursor: pointer; transition: .2s ease; }
 .print-button:hover { border-color: #a8b9ae; background: white; box-shadow: 0 8px 20px rgba(36,56,44,.07); transform: translateY(-1px); }
 .print-button svg { width: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
@@ -119,6 +124,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #3ca474; box-shadow: 0 0 0 5px rgba(60,164,116,.11); animation: pulse 2s infinite; }
 @keyframes pulse { 50% { box-shadow: 0 0 0 9px rgba(60,164,116,0); } }
 .station-heading h1 { display: flex; align-items: baseline; gap: 14px; margin: 11px 0 0; font-size: clamp(30px, 3.4vw, 48px); line-height: 1; letter-spacing: -.06em; }
+.station-heading > .eyebrow { display: none; }
+.station-heading > .eyebrow + h1 { margin-top: 0; }
 .station-heading h1 small { font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: .02em; }
 .station-heading-button { display: inline-flex; align-items: center; gap: 9px; padding: 2px 4px 4px 0; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--ink); font-size: inherit; font-weight: 700; line-height: 1; letter-spacing: inherit; cursor: pointer; transition: .2s ease; }
 .station-heading-button i { color: var(--green-2); font-size: .45em; font-style: normal; transform: translateY(-.05em); }
@@ -315,13 +322,14 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 
 .detail-modal { top: 76px; padding: 0; background: rgba(239,243,236,.98); }
 .detail-panel { width: 100%; height: calc(100vh - 76px); max-height: none; border: 0; border-radius: 0; overflow: auto; box-shadow: none; background: #f8faf5; }
-.detail-context { position: sticky; top: 0; z-index: 60; padding: 15px clamp(24px, 5vw, 76px) 11px; border-bottom: 1px solid var(--line); background: rgba(248,250,245,.94); backdrop-filter: blur(18px); }
-.detail-dashboard-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; padding-right: 112px; }
-.detail-back-button { position: absolute; top: 14px; right: clamp(16px, 2.3vw, 34px); display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 92px; height: 40px; padding: 0 17px; border: 1px solid #155b45; border-radius: 999px; background: var(--green); box-shadow: 0 7px 18px rgba(31,105,79,.24); color: white; font-size: 12px; font-weight: 700; cursor: pointer; transition: .2s ease; }
-.detail-back-button:hover { border-color: #0f4a38; background: #165a45; box-shadow: 0 9px 22px rgba(31,105,79,.32); transform: translateY(-1px); }
-.detail-back-button:focus-visible { outline: 3px solid rgba(86,177,130,.32); outline-offset: 3px; }
+.detail-context { position: sticky; top: 0; z-index: 60; padding: 10px clamp(24px, 5vw, 76px) 9px; border-bottom: 1px solid var(--line); background: rgba(248,250,245,.94); backdrop-filter: blur(18px); }
+.detail-dashboard-head { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding-right: 0; }
+.detail-dashboard-head .eyebrow { display: none; }
+.detail-dashboard-head .station-heading.compact h1 { margin-top: 0; }
 .station-heading.compact h1 { margin-top: 8px; font-size: clamp(24px, 2.6vw, 35px); }
-.detail-controls { gap: 8px; }
+.detail-controls { gap: 8px; flex-wrap: nowrap; }
+.detail-period-controls { min-width: 0; display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
+.detail-period-controls .date-control { flex: 0 0 auto; }
 .detail-controls .period-switch button { padding: 9px 11px; font-size: 10px; }
 .detail-controls .date-control { height: 42px; }
 .detail-controls .custom-range { min-height: 42px; }
@@ -469,7 +477,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .detail-chart-wrap { height: 380px; padding: 20px 0; }
 .detail-chart-grid.comparing .detail-chart-wrap { height: 330px; padding: 17px 12px 13px; }
 .table-head { max-width: 1200px; margin: 0 auto; padding: 0 24px 14px; display: flex; justify-content: space-between; align-items: end; }
-.table-head h3 { margin: 5px 0 0; font-size: 20px; letter-spacing: -.04em; }
+.table-head h3 { margin: 0; font-size: 20px; letter-spacing: -.04em; }
+.table-head .modal-kicker { display: none; }
 .outline-button { padding: 10px 14px; border: 1px solid #bdc9c1; border-radius: 10px; background: transparent; color: var(--green); font-size: 10px; font-weight: 600; cursor: pointer; }
 .outline-button span { margin-left: 9px; }
 .table-wrap { max-width: 1200px; max-height: 520px; overflow: auto; margin: 0 auto 60px; border: 1px solid var(--line); border-radius: 15px; background: white; }
@@ -513,6 +522,13 @@ tbody tr:hover { background: #f6f8f2; }
 .loading-mark i:nth-child(3) { height: 60%; animation-delay: -.7s; }
 @keyframes bars { to { height: 30%; opacity: .55; } }
 
+@media (max-width: 1180px) {
+  .detail-dashboard-head { display: block; }
+  .station-heading.compact { margin-bottom: 10px; }
+  .detail-controls { justify-content: flex-start; }
+  .detail-period-controls { flex: 1; }
+}
+
 @media (max-width: 980px) {
   .summary-strip { grid-template-columns: repeat(4, 1fr); }
   .weather-note { grid-column: 1 / -1; border-top: 1px solid var(--line); }
@@ -521,11 +537,13 @@ tbody tr:hover { background: #f6f8f2; }
   .station-content { grid-template-columns: 1fr 250px; }
   .detail-dashboard-head { display: block; }
   .station-heading.compact { margin-bottom: 13px; }
-  .detail-controls { justify-content: stretch; }
+  .detail-controls { justify-content: stretch; flex-wrap: wrap; }
   .detail-controls .detail-mode-switch { flex-basis: 100%; }
   .detail-controls .detail-mode-switch button { flex: 1; }
-  .detail-controls .period-switch { flex: 1; }
-  .detail-controls .period-switch button { flex: 1; }
+  .detail-period-controls { width: 100%; }
+  .detail-period-controls .period-switch { flex: 1; }
+  .detail-period-controls .period-switch button { flex: 1; }
+  .detail-period-controls .date-control { flex: 0 0 auto; }
   .detail-summary-strip { grid-template-columns: repeat(3, 1fr); }
   .detail-summary-strip p { grid-column: 1 / -1; border-top: 1px solid #e2e7de; }
   .detail-chart-grid.comparing { grid-template-columns: 1fr; }
@@ -553,6 +571,7 @@ tbody tr:hover { background: #f6f8f2; }
   .print-button { display: none; }
   .top-actions { position: fixed; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 105; }
   .refresh-button { min-width: 112px; height: 44px; padding-inline: 13px; border-color: #7da18b; background: rgba(255,255,252,.96); box-shadow: 0 8px 24px rgba(31,73,51,.16); }
+  .home-button { width: 44px; height: 44px; border-color: #155b45; box-shadow: 0 8px 24px rgba(31,73,51,.18); }
   .app-shell { padding: 27px 15px 25px; }
   .dashboard-head { display: block; }
   .station-heading { margin-bottom: 22px; }
@@ -617,8 +636,7 @@ tbody tr:hover { background: #f6f8f2; }
   .detail-modal { top: 70px; }
   .detail-panel { height: calc(100vh - 70px); }
   .detail-context { padding: 13px 15px 10px; }
-  .detail-dashboard-head { padding-right: 0; padding-top: 48px; }
-  .detail-back-button { top: 12px; right: 15px; }
+  .detail-dashboard-head { padding-right: 0; padding-top: 0; }
   .detail-dashboard-head .station-heading { margin-bottom: 13px; }
   .detail-summary-strip { grid-template-columns: repeat(2, 1fr); }
   .detail-summary-strip > div:nth-child(2) { border-right: 0; }
@@ -635,6 +653,10 @@ tbody tr:hover { background: #f6f8f2; }
   .detail-summary .detail-stat:nth-child(3) { grid-column: 1 / -1; }
   .detail-mode-switch { width: 100%; }
   .detail-mode-switch button { flex: 1; padding-inline: 7px; }
+  .detail-period-controls { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+  .detail-period-controls::-webkit-scrollbar { display: none; }
+  .detail-period-controls .period-switch { flex: 0 0 auto; }
+  .detail-period-controls .date-control { width: auto; min-width: 205px; flex: 0 0 205px; }
   .compare-inline-settings { width: 100%; }
   .compare-setting { width: 100%; }
   .compare-setting select { min-width: 0; flex: 1; }
@@ -786,7 +808,7 @@ tbody tr:hover { background: #f6f8f2; }
     <div class="brand-zone">
       <button class="brand" id="aboutOpen" type="button" aria-label="栽培ダスについて" aria-haspopup="dialog" aria-controls="aboutModal">
         <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span><b>栽培ダス</b><small>CULTIVATION WEATHER VIEW · V1.47</small></span>
+        <span><b>栽培ダス</b><small>CULTIVATION WEATHER VIEW · V1.50</small></span>
       </button>
       <div class="reference-date" id="referenceDateControl">
         <button class="reference-date-button" id="referenceDateButton" type="button" aria-label="今日として扱う日を変更" aria-describedby="referenceDateHint" aria-haspopup="dialog" aria-controls="referenceDateModal">
@@ -806,6 +828,9 @@ tbody tr:hover { background: #f6f8f2; }
         <span>印刷</span>
       </button>
       <button class="refresh-button" id="refreshButton" type="button" aria-label="気象データを再取得" title="気象データを再取得">データ再取得</button>
+      <button class="home-button" id="homeButton" type="button" aria-label="全ての観測値に戻る" title="ホーム（全ての観測値に戻る）">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5 12 3l8.5 7.5"/><path d="M5.5 9.5V21h13V9.5M9.5 21v-6h5v6"/></svg>
+      </button>
     </div>
   </header>
 
@@ -1024,24 +1049,26 @@ tbody tr:hover { background: #f6f8f2; }
               <button type="button" data-compare-mode="years">過去年との比較</button>
               <button type="button" data-compare-mode="stations">２地点を比較</button>
             </div>
-            <div class="period-switch" role="group" aria-label="詳細表示期間">
-              <button type="button" data-period="day">一日</button>
-              <button type="button" class="active" data-period="week">一週間</button>
-              <button type="button" data-period="month">一か月</button>
-              <button type="button" data-period="year">年度</button>
-              <button type="button" data-period="custom">期間指定</button>
-            </div>
-            <div class="date-control" id="detailDateControl">
-              <button type="button" class="date-step" id="detailDatePrevious" aria-label="詳細の前の期間">‹</button>
-              <button type="button" class="date-label" id="detailDateLabel">日曜〜土曜</button>
-              <button type="button" class="date-step" id="detailDateNext" aria-label="詳細の次の期間">›</button>
-              <input id="detailDateInput" type="date" aria-label="詳細の基準日を選択">
-            </div>
-            <div class="custom-range" id="detailCustomRange" hidden>
-              <label><span>開始</span><input id="detailCustomStart" type="date" aria-label="詳細の開始日"></label>
-              <i>〜</i>
-              <label><span>終了</span><input id="detailCustomEnd" type="date" aria-label="詳細の終了日"></label>
-              <button class="range-apply" id="detailCustomApply" type="button">表示</button>
+            <div class="detail-period-controls">
+              <div class="period-switch" role="group" aria-label="詳細表示期間">
+                <button type="button" data-period="day">一日</button>
+                <button type="button" class="active" data-period="week">一週間</button>
+                <button type="button" data-period="month">一か月</button>
+                <button type="button" data-period="year">年度</button>
+                <button type="button" data-period="custom">期間指定</button>
+              </div>
+              <div class="date-control" id="detailDateControl">
+                <button type="button" class="date-step" id="detailDatePrevious" aria-label="詳細の前の期間">‹</button>
+                <button type="button" class="date-label" id="detailDateLabel">日曜〜土曜</button>
+                <button type="button" class="date-step" id="detailDateNext" aria-label="詳細の次の期間">›</button>
+                <input id="detailDateInput" type="date" aria-label="詳細の基準日を選択">
+              </div>
+              <div class="custom-range" id="detailCustomRange" hidden>
+                <label><span>開始</span><input id="detailCustomStart" type="date" aria-label="詳細の開始日"></label>
+                <i>〜</i>
+                <label><span>終了</span><input id="detailCustomEnd" type="date" aria-label="詳細の終了日"></label>
+                <button class="range-apply" id="detailCustomApply" type="button">表示</button>
+              </div>
             </div>
           </div>
         </section>
@@ -1051,7 +1078,6 @@ tbody tr:hover { background: #f6f8f2; }
           <div><span>表示範囲</span><strong id="detailRangeText">--</strong></div>
           <p id="detailStatusText">観測データを表示しています</p>
         </section>
-        <button class="detail-back-button" id="detailClose" type="button" aria-label="全ての観測値に戻る">戻る</button>
       </div>
       <div class="detail-overview">
         <div class="detail-title-compact">
@@ -1620,7 +1646,7 @@ tbody tr:hover { background: #f6f8f2; }
     throw new Error('対応していないデータ要求です');
   }
 
-  globalThis.SaibaiDasStandalone = { request, version: '1.47' };
+  globalThis.SaibaiDasStandalone = { request, version: '1.50' };
 }());
 
 </script>
@@ -1994,6 +2020,23 @@ function periodShortDate(value, includeTime = false, weather = state.weather) {
   }
   if (weather?.granularity === '1か月') return `${date.getMonth() + 1}月`;
   return `${date.getMonth() + 1}/${date.getDate()}(${weekday})`;
+}
+
+function csvPeriodDate(value, includeTime = false, weather = state.weather) {
+  const date = toDate(value);
+  if (!date) return '--';
+  const weekday = new Intl.DateTimeFormat('ja-JP', { weekday: 'short' }).format(date);
+  if (weather?.granularity === '1か月') return `${date.getFullYear()}年${date.getMonth() + 1}月`;
+  const datePart = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}(${weekday})`;
+  if (!includeTime) return datePart;
+  const timePart = new Intl.DateTimeFormat('ja-JP', { hour: '2-digit', minute: '2-digit', hour12: false }).format(date);
+  return `${datePart} ${timePart}`;
+}
+
+function csvDateLabel(weather = state.weather) {
+  if (weather?.granularity === '1時間') return '日時（年・曜日）';
+  if (weather?.granularity === '1か月') return '年月';
+  return '日付（年・曜日）';
 }
 
 function weatherPeriodText(weather) {
@@ -3625,6 +3668,7 @@ function confirmStation() {
 function openDetail(metric) {
   state.detailMetric = metric;
   $('#detailModal').hidden = false;
+  $('#homeButton').classList.add('visible');
   updateBodyLock();
   renderCompareControls();
   renderDetail(metric);
@@ -3634,6 +3678,7 @@ function openDetail(metric) {
 function closeDetail() {
   closeDetailMetricMenu();
   $('#detailModal').hidden = true;
+  $('#homeButton').classList.remove('visible');
   updateBodyLock();
 }
 
@@ -3968,9 +4013,11 @@ function renderComparisonChart(metric, weather, sharedScale = null) {
 
 function tableColumns(metric, weather = state.weather) {
   const hourly = weather?.granularity === '1時間';
-  const monthly = weather?.granularity === '1か月';
-  const dateLabel = hourly ? '日時（曜日）' : monthly ? '月' : '日付（曜日）';
-  const columns = [{ key: 'time', label: dateLabel, format: (value) => periodShortDate(value, hourly, weather) }];
+  const columns = [{
+    key: 'time',
+    label: csvDateLabel(weather),
+    format: (value) => csvPeriodDate(value, hourly, weather),
+  }];
   if (metric === 'temperature') {
     columns.push(
       { key: 'temperature', label: '平均気温 (℃)' },
@@ -4006,15 +4053,15 @@ function renderComparisonTable(metric, firstWeather, secondWeather) {
   const firstRecords = chartRecords(firstWeather?.records || [], firstWeather);
   const secondRecords = chartRecords(secondWeather?.records || [], secondWeather);
   const length = Math.max(firstRecords.length, secondRecords.length);
-  const headers = ['日時（曜日）'];
+  const headers = [csvDateLabel(firstWeather)];
   if (metric === 'temperature') {
     headers.push(`${firstName} 平均`, `${firstName} 最高`, `${firstName} 最低`);
-    if (showSecondDate) headers.push(`${secondName} 日時（曜日）`);
+    if (showSecondDate) headers.push(`${secondName} ${csvDateLabel(secondWeather)}`);
     headers.push(`${secondName} 平均`, `${secondName} 最高`, `${secondName} 最低`);
   } else {
     headers.push(`${firstName} ${config.name}`);
     if (metric === 'wind') headers.push(`${firstName} 風向`);
-    if (showSecondDate) headers.push(`${secondName} 日時（曜日）`);
+    if (showSecondDate) headers.push(`${secondName} ${csvDateLabel(secondWeather)}`);
     headers.push(`${secondName} ${config.name}`);
     if (metric === 'wind') headers.push(`${secondName} 風向`);
   }
@@ -4023,8 +4070,8 @@ function renderComparisonTable(metric, firstWeather, secondWeather) {
   for (let index = 0; index < length; index += 1) {
     const first = firstRecords[index] || emptyRecord('');
     const second = secondRecords[index] || emptyRecord('');
-    const firstDate = periodShortDate(first.time, firstWeather?.granularity === '1時間', firstWeather);
-    const secondDate = periodShortDate(second.time, secondWeather?.granularity === '1時間', secondWeather);
+    const firstDate = csvPeriodDate(first.time, firstWeather?.granularity === '1時間', firstWeather);
+    const secondDate = csvPeriodDate(second.time, secondWeather?.granularity === '1時間', secondWeather);
     const cells = [firstDate];
     if (metric === 'temperature') {
       cells.push(
@@ -4053,15 +4100,63 @@ function renderComparisonTable(metric, firstWeather, secondWeather) {
     : `<tr><td colspan="${headers.length}" style="text-align:center;padding:30px">表示できる比較データがありません。</td></tr>`;
 }
 
+function comparisonCsvRows(metric, firstWeather, secondWeather, quote) {
+  const config = METRICS[metric];
+  const firstStationName = firstWeather?.station?.name || state.station?.name || '比較A';
+  const secondStationName = secondWeather?.station?.name || '比較B';
+  const showSecondDate = state.compareMode === 'years';
+  const firstName = showSecondDate ? `${firstWeather?.rangeStart?.slice(0, 4) || '基準年'} ${firstStationName}` : firstStationName;
+  const secondName = showSecondDate ? `${secondWeather?.rangeStart?.slice(0, 4) || '過去年'} ${secondStationName}` : secondStationName;
+  const firstRecords = chartRecords(firstWeather?.records || [], firstWeather);
+  const secondRecords = chartRecords(secondWeather?.records || [], secondWeather);
+  const length = Math.max(firstRecords.length, secondRecords.length);
+  const headers = [csvDateLabel(firstWeather)];
+  if (metric === 'temperature') {
+    headers.push(`${firstName} 平均`, `${firstName} 最高`, `${firstName} 最低`);
+    if (showSecondDate) headers.push(`${secondName} ${csvDateLabel(secondWeather)}`);
+    headers.push(`${secondName} 平均`, `${secondName} 最高`, `${secondName} 最低`);
+  } else {
+    headers.push(`${firstName} ${config.name}`);
+    if (metric === 'wind') headers.push(`${firstName} 風向`);
+    if (showSecondDate) headers.push(`${secondName} ${csvDateLabel(secondWeather)}`);
+    headers.push(`${secondName} ${config.name}`);
+    if (metric === 'wind') headers.push(`${secondName} 風向`);
+  }
+  const rows = [headers.map(quote).join(',')];
+  for (let index = 0; index < length; index += 1) {
+    const first = firstRecords[index] || emptyRecord('');
+    const second = secondRecords[index] || emptyRecord('');
+    const cells = [csvPeriodDate(first.time, firstWeather?.granularity === '1時間', firstWeather)];
+    if (metric === 'temperature') {
+      cells.push(
+        formatNumber(first.temperature, config.digits),
+        formatNumber(first.temperatureMax, config.digits),
+        formatNumber(first.temperatureMin, config.digits),
+      );
+      if (showSecondDate) cells.push(csvPeriodDate(second.time, secondWeather?.granularity === '1時間', secondWeather));
+      cells.push(
+        formatNumber(second.temperature, config.digits),
+        formatNumber(second.temperatureMax, config.digits),
+        formatNumber(second.temperatureMin, config.digits),
+      );
+    } else {
+      cells.push(formatNumber(first[config.key], config.digits));
+      if (metric === 'wind') cells.push(first.windDirection || '--');
+      if (showSecondDate) cells.push(csvPeriodDate(second.time, secondWeather?.granularity === '1時間', secondWeather));
+      cells.push(formatNumber(second[config.key], config.digits));
+      if (metric === 'wind') cells.push(second.windDirection || '--');
+    }
+    rows.push(cells.map(quote).join(','));
+  }
+  return rows;
+}
+
 function downloadCsv() {
   if (!state.detailMetric || !state.weather) return;
   const metric = state.detailMetric;
   const quote = (value) => `"${String(value ?? '').replaceAll('"', '""')}"`;
   if (state.compareMode !== 'single' && state.compareWeather) {
-    const rows = [
-      ...$('#detailTableHead').querySelectorAll('tr'),
-      ...$('#detailTableBody').querySelectorAll('tr'),
-    ].map((row) => [...row.children].map((cell) => quote(cell.textContent.trim())).join(','));
+    const rows = comparisonCsvRows(metric, state.weather, state.compareWeather, quote);
     const blob = new Blob([`\ufeff${rows.join('\r\n')}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -4072,7 +4167,13 @@ function downloadCsv() {
     toast('比較CSVを保存しました');
     return;
   }
-  const columns = tableColumns(metric, state.weather);
+  const columns = tableColumns(metric, state.weather).map((column) => column.key === 'time'
+    ? {
+        ...column,
+        label: csvDateLabel(state.weather),
+        format: (value) => csvPeriodDate(value, state.weather?.granularity === '1時間', state.weather),
+      }
+    : column);
   const rows = [columns.map((column) => quote(column.label)).join(',')];
   state.weather.records.forEach((record) => {
     rows.push(columns.map((column) => quote(column.format ? column.format(record[column.key]) : record[column.key])).join(','));
@@ -4210,6 +4311,7 @@ function bindEvents() {
   $('#printButton').addEventListener('click', printCurrentView);
   const reloadWeatherData = () => { toast('気象データを再取得します'); loadWeather(); };
   $('#refreshButton').addEventListener('click', reloadWeatherData);
+  $('#homeButton').addEventListener('click', closeDetail);
   $('#loadingRefreshButton').addEventListener('click', reloadWeatherData);
   window.addEventListener('beforeprint', preparePrintView);
   window.addEventListener('afterprint', finishPrintView);
@@ -4287,7 +4389,6 @@ function bindEvents() {
     monthSelect.addEventListener('change', () => populateCultivationDaySelect(monthSelect, daySelect, daySelect.value));
   });
   $$('#cultivationSettings select').forEach((select) => select.addEventListener('change', loadCultivationAnalysis));
-  $('#detailClose').addEventListener('click', closeDetail);
   $('#csvButton').addEventListener('click', downloadCsv);
   document.addEventListener('keydown', (event) => {
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); openStationModal(); }
