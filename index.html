@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#f4f7f1">
-  <meta name="application-version" content="1.50">
+  <meta name="application-version" content="1.55">
   <meta name="license" content="CC BY">
   <meta name="description" content="気象庁アメダスの観測値と栽培期間の気象指標を見渡せるダッシュボード">
-  <title>栽培ダス V1.50 — 栽培気象ダッシュボード</title>
+  <title>栽培ダス V1.55 — 栽培気象ダッシュボード</title>
   <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap');
 
@@ -117,6 +117,10 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .print-button { display: flex; align-items: center; justify-content: center; gap: 7px; height: 48px; padding: 0 15px; border: 1px solid var(--line); border-radius: 13px; background: rgba(255,255,252,.82); color: var(--green); font-size: 11px; font-weight: 700; cursor: pointer; transition: .2s ease; }
 .print-button:hover { border-color: #a8b9ae; background: white; box-shadow: 0 8px 20px rgba(36,56,44,.07); transform: translateY(-1px); }
 .print-button svg { width: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.license-info-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 48px; padding: 0 15px; border: 1px solid #9fb7a8; border-radius: 13px; background: rgba(239,246,232,.88); color: var(--green); font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: .2s ease; }
+.license-info-button:hover { border-color: var(--green-2); background: #fff; box-shadow: 0 8px 20px rgba(36,56,44,.08); transform: translateY(-1px); }
+.license-info-button:focus-visible { outline: 3px solid rgba(86,177,130,.3); outline-offset: 3px; }
+.license-info-mark { font: 700 17px/1 "Noto Sans JP", sans-serif; }
 
 .app-shell { max-width: 1460px; margin: 0 auto; padding: 30px clamp(22px, 4vw, 70px) 24px; }
 .dashboard-head { display: flex; justify-content: space-between; align-items: end; gap: 28px; margin-bottom: 19px; }
@@ -206,6 +210,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .station-panel, .detail-panel { width: min(1260px, 100%); max-height: calc(100vh - 44px); overflow: hidden; border: 1px solid rgba(255,255,255,.6); border-radius: 24px; background: #f8faf5; box-shadow: var(--shadow); animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 .station-modal { z-index: 100; }
 .about-modal { z-index: 110; }
+.license-modal { z-index: 115; }
 .reference-date-modal { z-index: 120; }
 @keyframes rise { from { opacity: 0; transform: translateY(18px) scale(.985); } }
 .modal-head { display: flex; justify-content: space-between; align-items: center; padding: 24px 28px 19px; }
@@ -222,6 +227,30 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .about-signature p { display: flex; align-items: center; gap: 17px; margin: 0; color: var(--muted); font: 500 11px "DM Mono", monospace; }
 .about-signature b { color: var(--ink); font-family: "Noto Sans JP", sans-serif; font-size: 13px; }
 .license-badge { padding: 6px 10px; border-radius: 999px; background: var(--green); color: white; font: 600 9px "DM Mono", monospace; letter-spacing: .08em; }
+.license-panel { width: min(980px, 100%); max-height: calc(100vh - 44px); overflow: auto; border: 1px solid rgba(255,255,255,.68); border-radius: 24px; background: #fbfcf8; box-shadow: var(--shadow); animation: rise .3s cubic-bezier(.2,.8,.2,1); overscroll-behavior: contain; }
+.license-head { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 25px 29px 20px; border-bottom: 1px solid var(--line); background: linear-gradient(115deg, rgba(220,236,200,.92), rgba(251,252,248,.97)); }
+.license-head h2 { margin: 8px 0 0; font-size: 28px; line-height: 1.15; letter-spacing: -.045em; }
+.license-copy { padding: 24px 29px 28px; }
+.license-lead { margin: 0 0 18px; padding: 16px 18px; border-left: 4px solid var(--green-2); border-radius: 0 13px 13px 0; background: rgba(229,238,218,.56); color: #304138; font-size: 13px; font-weight: 600; line-height: 1.75; }
+.license-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.license-section { min-width: 0; padding: 18px 19px; border: 1px solid #dce5da; border-radius: 16px; background: rgba(255,255,252,.8); }
+.license-section.full { grid-column: 1 / -1; }
+.app-license-section { border-color: #b9cfb8; background: linear-gradient(135deg, rgba(226,239,211,.66), rgba(255,255,252,.9)); }
+.app-license-section > p:first-of-type { color: #30463a; font-weight: 600; }
+.license-section h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 7px; color: #18382c; font-size: 15px; line-height: 1.4; }
+.license-section h3 span { display: grid; place-items: center; width: 27px; height: 27px; flex: 0 0 auto; border-radius: 8px; background: var(--lime); color: var(--green); font-size: 13px; }
+.license-host { display: inline-block; max-width: 100%; margin: 0 0 10px; padding: 4px 8px; overflow-wrap: anywhere; border-radius: 7px; background: #eef3e9; color: #526159; font: 500 9px/1.45 "DM Mono", monospace; }
+.license-section p { margin: 0; color: #53625a; font-size: 12px; line-height: 1.7; }
+.license-list { margin: 10px 0 0; padding-left: 1.25em; color: #53625a; font-size: 12px; line-height: 1.7; }
+.license-list li + li { margin-top: 4px; }
+.license-links { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+.license-links a { display: inline-flex; align-items: center; min-height: 31px; padding: 5px 10px; border: 1px solid #cbd8ce; border-radius: 9px; background: #fff; color: var(--green); font-size: 10px; font-weight: 700; text-decoration: none; }
+.license-links a:hover { border-color: var(--green-2); background: #f3f8ee; }
+.library-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; margin-top: 11px; }
+.library-item { min-width: 0; padding: 12px; border-radius: 11px; background: #f2f5ee; }
+.library-item strong { display: block; color: #263a31; font-size: 12px; }
+.library-item small { display: block; margin-top: 4px; color: #6a7870; font-size: 10px; line-height: 1.55; }
+.license-footnote { margin: 16px 2px 0; color: #738078; font-size: 10px; line-height: 1.65; }
 .reference-date-panel { width: min(620px, 100%); overflow: hidden; border: 1px solid rgba(255,255,255,.68); border-radius: 24px; background: #fbfcf8; box-shadow: var(--shadow); animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 .reference-date-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 25px 28px 20px; border-bottom: 1px solid var(--line); background: linear-gradient(115deg, rgba(220,236,200,.58), rgba(251,252,248,.94)); }
 .reference-date-modal-head h2 { margin: 8px 0 0; font-size: 27px; line-height: 1.15; letter-spacing: -.045em; }
@@ -488,6 +517,11 @@ th:first-child, td:first-child { text-align: left; }
 th { position: sticky; top: 0; z-index: 1; background: #edf2e8; color: #5c6962; font-size: 9px; letter-spacing: .03em; }
 td { font-family: "DM Mono", "Noto Sans JP", monospace; }
 tbody tr:hover { background: #f6f8f2; }
+.imputed-data-cell { min-width: 190px; white-space: normal; }
+.imputed-data-value { color: #bd3d2e; font-weight: 800; }
+.imputed-data-note { display: block; max-width: 240px; margin: 4px 0 0 auto; color: #bd3d2e; font: 600 8px/1.55 "Noto Sans JP", sans-serif; white-space: normal; }
+.imputed-data-row td:first-child { color: #9f352a; font-weight: 700; }
+.imputed-data-row td:first-child::after { content: "補完あり"; display: inline-block; margin-left: 7px; padding: 2px 5px; border-radius: 999px; background: #f8dfd9; color: #a83a2d; font: 700 7px "Noto Sans JP", sans-serif; vertical-align: middle; }
 .reference-future-row { opacity: .34; background: #f2f4ef; }
 .reference-future-row:hover { opacity: .52; background: #eef2ea; }
 .reference-future-row td:first-child { position: relative; }
@@ -530,6 +564,7 @@ tbody tr:hover { background: #f6f8f2; }
 }
 
 @media (max-width: 980px) {
+  .library-list { grid-template-columns: 1fr; }
   .summary-strip { grid-template-columns: repeat(4, 1fr); }
   .weather-note { grid-column: 1 / -1; border-top: 1px solid var(--line); }
   .source-cell { border-right: 0 !important; }
@@ -569,8 +604,11 @@ tbody tr:hover { background: #f6f8f2; }
   .reference-date-button small { font-size: 7px; letter-spacing: .04em; }
   .reference-date-button strong { font-size: clamp(12px, 4vw, 16px); }
   .print-button { display: none; }
-  .top-actions { position: fixed; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 105; }
-  .refresh-button { min-width: 112px; height: 44px; padding-inline: 13px; border-color: #7da18b; background: rgba(255,255,252,.96); box-shadow: 0 8px 24px rgba(31,73,51,.16); }
+  .top-actions { position: fixed; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 105; gap: 6px; }
+  .license-info-button { width: auto; min-width: 0; height: 44px; gap: 4px; padding: 0 8px; border-color: #7da18b; background: rgba(239,246,232,.97); box-shadow: 0 8px 24px rgba(31,73,51,.15); font-size: 9px; }
+  .license-info-mark { font-size: 15px; }
+  .license-info-button .button-label { display: inline; }
+  .refresh-button { min-width: 104px; height: 44px; padding-inline: 10px; border-color: #7da18b; background: rgba(255,255,252,.96); box-shadow: 0 8px 24px rgba(31,73,51,.16); }
   .home-button { width: 44px; height: 44px; border-color: #155b45; box-shadow: 0 8px 24px rgba(31,73,51,.18); }
   .app-shell { padding: 27px 15px 25px; }
   .dashboard-head { display: block; }
@@ -604,6 +642,15 @@ tbody tr:hover { background: #f6f8f2; }
   .about-copy { padding: 21px 20px 18px; }
   .about-copy p { font-size: 13px; line-height: 1.85; }
   .about-signature { padding: 15px 20px 18px; }
+  .license-modal { padding: 12px; }
+  .license-panel { max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); border-radius: 18px; }
+  .license-head { padding: 20px 18px 16px; }
+  .license-head h2 { font-size: 22px; }
+  .license-copy { padding: 18px 16px 22px; }
+  .license-lead { padding: 13px 14px; font-size: 12px; }
+  .license-grid { grid-template-columns: 1fr; gap: 11px; }
+  .license-section.full { grid-column: auto; }
+  .license-section { padding: 15px; }
   .reference-date-modal { padding: 16px; }
   .reference-date-panel { max-height: calc(100vh - 32px); overflow: auto; border-radius: 18px; }
   .reference-date-modal-head { padding: 21px 20px 17px; }
@@ -808,7 +855,7 @@ tbody tr:hover { background: #f6f8f2; }
     <div class="brand-zone">
       <button class="brand" id="aboutOpen" type="button" aria-label="栽培ダスについて" aria-haspopup="dialog" aria-controls="aboutModal">
         <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span><b>栽培ダス</b><small>CULTIVATION WEATHER VIEW · V1.50</small></span>
+        <span><b>栽培ダス</b><small>CULTIVATION WEATHER VIEW · V1.55</small></span>
       </button>
       <div class="reference-date" id="referenceDateControl">
         <button class="reference-date-button" id="referenceDateButton" type="button" aria-label="今日として扱う日を変更" aria-describedby="referenceDateHint" aria-haspopup="dialog" aria-controls="referenceDateModal">
@@ -823,6 +870,9 @@ tbody tr:hover { background: #f6f8f2; }
     </div>
 
     <div class="top-actions">
+      <button class="license-info-button" id="licenseInfoButton" type="button" aria-label="外部通信・ライセンスを表示" aria-haspopup="dialog" aria-controls="licenseModal" title="外部通信・ライセンス">
+        <span class="license-info-mark" aria-hidden="true">ⓘ</span><span class="button-label">外部通信・ライセンス</span>
+      </button>
       <button class="print-button" id="printButton" type="button" aria-label="現在の表示を印刷" title="現在の表示を印刷">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v6H7z"/><path d="M17.5 12h.01"/></svg>
         <span>印刷</span>
@@ -998,6 +1048,107 @@ tbody tr:hover { background: #f6f8f2; }
         <span class="license-badge">CC BY</span>
         <p><time datetime="2026-08-11">2026/08/11</time><b>川俣　純</b></p>
       </footer>
+    </article>
+  </div>
+
+  <div class="modal license-modal" id="licenseModal" role="dialog" aria-modal="true" aria-labelledby="licenseModalTitle" hidden>
+    <article class="license-panel">
+      <header class="license-head">
+        <div>
+          <span class="modal-kicker">NETWORK &amp; LICENSE</span>
+          <h2 id="licenseModalTitle">外部通信・ライセンス</h2>
+        </div>
+        <button class="close-button" id="licenseClose" type="button" aria-label="閉じる">×</button>
+      </header>
+      <div class="license-copy">
+        <p class="license-lead">栽培ダスは、表示に必要な公開データ・地図・外部ライブラリーをインターネットから読み込みます。ログインやAPIキーは不要で、気象・地図データの取得は読み取りのみです。入力した作物名は、利用者が検索リンクを開いた時だけGoogle検索へ送られます。</p>
+        <div class="license-grid">
+          <section class="license-section">
+            <h3><span aria-hidden="true">気</span>気象データ：気象庁</h3>
+            <code class="license-host">www.jma.go.jp / www.data.jma.go.jp</code>
+            <p>アメダス観測所一覧、最新観測時刻、地点別JSONと、「過去の気象データ検索」の日別・月別・10分値を読み込みます。</p>
+            <ul class="license-list">
+              <li>主な項目：気温、降水量、風向・風速、湿度、日照時間、積雪深、気圧</li>
+              <li>WebAPI相当の公開JSON：観測所一覧（amedastable.json）、最新時刻（latest_time.txt）、地点別観測値（data/point/*.json）</li>
+              <li>過去データ：日別・月別・10分値の公開HTML表。外部の公開CSVは使用しません</li>
+              <li>利用条件：原則「公共データ利用規約（第1.0版）」。出典明示と、加工した場合の明示が必要</li>
+            </ul>
+            <div class="license-links">
+              <a href="https://www.jma.go.jp/jma/kishou/info/coment.html" target="_blank" rel="noopener">気象庁の利用規約 ↗</a>
+              <a href="https://www.jma.go.jp/bosai/amedas/" target="_blank" rel="noopener">アメダス ↗</a>
+              <a href="https://www.data.jma.go.jp/stats/etrn/" target="_blank" rel="noopener">過去データ検索 ↗</a>
+            </div>
+          </section>
+
+          <section class="license-section">
+            <h3><span aria-hidden="true">地</span>地図：国土地理院</h3>
+            <code class="license-host">cyberjapandata.gsi.go.jp</code>
+            <p>観測地点を選ぶ地図に、地理院タイルの「白地図」をリアルタイムで読み込みます。地図上にも「国土地理院」の出典リンクを表示しています。</p>
+            <ul class="license-list">
+              <li>利用条件：国土地理院コンテンツ利用規約</li>
+              <li>ウェブ上でリアルタイムに読み込む利用は、出典を明示すれば原則として申請不要</li>
+            </ul>
+            <div class="license-links">
+              <a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">地理院タイル一覧 ↗</a>
+              <a href="https://maps.gsi.go.jp/help/termsofuse.html" target="_blank" rel="noopener">利用規約 ↗</a>
+            </div>
+          </section>
+
+          <section class="license-section full">
+            <h3><span aria-hidden="true">部</span>外部ライブラリーとCDN</h3>
+            <p>HTMLファイルを単独で動かせるよう、画面表示に必要なライブラリーと書体をCDNから読み込みます。接続時には通常のウェブ通信として、接続先へIPアドレスやブラウザー情報等が送信される場合があります。</p>
+            <div class="library-list">
+              <div class="library-item"><strong>Chart.js 4.4.9</strong><small>グラフ描画 · MIT License<br>cdn.jsdelivr.net</small></div>
+              <div class="library-item"><strong>Leaflet 1.9.4</strong><small>地図操作 · BSD 2-Clause License<br>unpkg.com</small></div>
+              <div class="library-item"><strong>Google Fonts</strong><small>Noto Sans JP / Manrope / DM Mono<br>各書体のオープンソースライセンス</small></div>
+            </div>
+            <div class="license-links">
+              <a href="https://github.com/chartjs/Chart.js/blob/master/LICENSE.md" target="_blank" rel="noopener">Chart.jsライセンス ↗</a>
+              <a href="https://github.com/Leaflet/Leaflet/blob/main/LICENSE" target="_blank" rel="noopener">Leafletライセンス ↗</a>
+              <a href="https://www.jsdelivr.com/terms/terms-of-use" target="_blank" rel="noopener">jsDelivr利用規約 ↗</a>
+              <a href="https://unpkg.com/" target="_blank" rel="noopener">UNPKG公式情報 ↗</a>
+              <a href="https://developers.google.com/fonts" target="_blank" rel="noopener">Google Fonts ↗</a>
+              <a href="https://developers.google.com/fonts/terms" target="_blank" rel="noopener">Fonts API規約 ↗</a>
+            </div>
+          </section>
+
+          <section class="license-section">
+            <h3><span aria-hidden="true">検</span>作物のGoogle検索</h3>
+            <code class="license-host">www.google.com</code>
+            <p>「栽培する作物はなんですか？」に入力した作物名は、検索テーマのリンクを開いた時だけ検索語としてGoogleへ送信されます。検索を開かなければ送信されません。</p>
+            <div class="license-links">
+              <a href="https://policies.google.com/terms?hl=ja" target="_blank" rel="noopener">Google利用規約 ↗</a>
+              <a href="https://policies.google.com/privacy?hl=ja" target="_blank" rel="noopener">プライバシーポリシー ↗</a>
+            </div>
+          </section>
+
+          <section class="license-section">
+            <h3><span aria-hidden="true">端</span>CSV・端末内の保存</h3>
+            <p>外部の公開CSVは取得していません。「CSVで保存」は、画面に読み込んだ観測値から利用端末内でCSVを生成する機能で、CSVを外部へ送信しません。</p>
+            <ul class="license-list">
+              <li>選択した地点、比較地点、栽培期間、基準温度、低温判定をブラウザー内に保存</li>
+              <li>栽培ダス本体の詳しい利用条件は、下記の「栽培ダスのライセンス」を参照</li>
+            </ul>
+          </section>
+
+          <section class="license-section full app-license-section">
+            <h3><span aria-hidden="true">栽</span>栽培ダスのライセンス</h3>
+            <p>栽培ダスは <a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="license noopener">Creative Commons 表示 4.0 国際（CC BY 4.0）</a> で公開されています。営利・非営利を問わず、利用・複製・改変・再配布できます。</p>
+            <ul class="license-list">
+              <li>作者名「川俣 純」を表示する</li>
+              <li>CC BY 4.0とライセンスへのリンクを示す</li>
+              <li>改変した場合は変更したことを明示する</li>
+              <li>後続利用者の権利を妨げる追加的な制約を設けない</li>
+            </ul>
+            <p style="margin-top: 11px;">ライセンスは無保証であり、第三者が持つ著作権・商標権・特許権・肖像権など、すべての権利を許諾するものではありません。</p>
+            <div class="license-links">
+              <a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="license noopener">CC BY 4.0 ライセンス ↗</a>
+              <a href="https://creativecommons.org/licenses/by/4.0/legalcode.ja" target="_blank" rel="license noopener">リーガルコード ↗</a>
+            </div>
+          </section>
+        </div>
+        <p class="license-footnote">確認日：2026年8月19日。この表示は利用条件の要点を分かりやすくまとめたものです。正確な条件と最新情報は、各提供元のリンク先を確認してください。</p>
+      </div>
     </article>
   </div>
 
@@ -1574,7 +1725,147 @@ tbody tr:hover { background: #f6f8f2; }
     return date;
   }
 
-  async function weatherPayload(stationId, period, dateText, startText, endText) {
+  const SUPPLEMENT_FIELDS = [
+    'temperature', 'temperatureMax', 'temperatureMin', 'precipitation',
+    'humidity', 'wind', 'sunshine', 'snow', 'pressure',
+  ];
+
+  function numericObservation(value) {
+    if (value == null || value === '') return null;
+    const number = Number(value);
+    return Number.isFinite(number) ? number : null;
+  }
+
+  function observationBucket(time, granularity) {
+    if (granularity === '1時間') return String(time || '').slice(0, 13);
+    if (granularity === '1か月') return String(time || '').slice(0, 7);
+    return String(time || '').slice(0, 10);
+  }
+
+  function stationDistanceKm(first, second) {
+    const lat1 = Number(first?.lat) * Math.PI / 180;
+    const lat2 = Number(second?.lat) * Math.PI / 180;
+    const deltaLat = lat2 - lat1;
+    const deltaLon = (Number(second?.lon) - Number(first?.lon)) * Math.PI / 180;
+    if (![lat1, lat2, deltaLat, deltaLon].every(Number.isFinite)) return Number.POSITIVE_INFINITY;
+    const value = Math.sin(deltaLat / 2) ** 2
+      + Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLon / 2) ** 2;
+    return 6371 * 2 * Math.atan2(Math.sqrt(value), Math.sqrt(1 - value));
+  }
+
+  function expectedObservationTimes(rangeStart, rangeEnd, granularity, observedAt) {
+    const start = isoDate(rangeStart);
+    const requestedEnd = isoDate(rangeEnd);
+    const observedDay = isoDate(observedAt);
+    const end = requestedEnd < observedDay ? requestedEnd : observedDay;
+    if (start > end) return [];
+    const times = [];
+    if (granularity === '1時間') {
+      const cursor = new Date(`${start}T00:00:00Z`);
+      const finalHour = end === observedDay ? observedAt.getHours() : 23;
+      const limit = new Date(`${end}T${pad(finalHour)}:00:00Z`);
+      while (cursor <= limit) {
+        times.push(`${cursor.toISOString().slice(0, 13)}:00:00+09:00`);
+        cursor.setUTCHours(cursor.getUTCHours() + 1);
+      }
+      return times;
+    }
+    if (granularity === '1か月') {
+      const cursor = new Date(`${start.slice(0, 7)}-01T00:00:00Z`);
+      const limit = new Date(`${end.slice(0, 7)}-01T00:00:00Z`);
+      while (cursor <= limit) {
+        times.push(`${cursor.toISOString().slice(0, 10)}T00:00:00+09:00`);
+        cursor.setUTCMonth(cursor.getUTCMonth() + 1);
+      }
+      return times;
+    }
+    const cursor = new Date(`${start}T00:00:00Z`);
+    const limit = new Date(`${end}T00:00:00Z`);
+    while (cursor <= limit) {
+      times.push(`${cursor.toISOString().slice(0, 10)}T00:00:00+09:00`);
+      cursor.setUTCDate(cursor.getUTCDate() + 1);
+    }
+    return times;
+  }
+
+  function imputationSummary(records) {
+    return (records || []).flatMap((record) => Object.entries(record?._imputed || {}).map(([field, source]) => ({
+      time: record.time,
+      field,
+      stationId: source.stationId,
+      stationName: source.stationName,
+      distanceKm: source.distanceKm,
+      sourceTime: source.sourceTime,
+    })));
+  }
+
+  async function supplementWeatherRecords({ station, stations, period, dateText, startText, endText, rangeStart, rangeEnd, granularity, observedAt, records }) {
+    const activeFields = SUPPLEMENT_FIELDS.filter((field) => (records || [])
+      .some((record) => numericObservation(record?.[field]) != null));
+    if (!activeFields.length) return { records, imputationSummary: [] };
+
+    const byBucket = new Map((records || []).map((record) => [observationBucket(record.time, granularity), { ...record }]));
+    const unresolved = new Set();
+    expectedObservationTimes(rangeStart, rangeEnd, granularity, observedAt).forEach((time) => {
+      const bucket = observationBucket(time, granularity);
+      const record = byBucket.get(bucket) || { time };
+      byBucket.set(bucket, record);
+      activeFields.forEach((field) => {
+        if (numericObservation(record[field]) == null) unresolved.add(`${bucket}|${field}`);
+      });
+    });
+    if (!unresolved.size) {
+      const completed = [...byBucket.values()].sort((a, b) => String(a.time).localeCompare(String(b.time)));
+      return { records: completed, imputationSummary: [] };
+    }
+
+    const candidates = stations
+      .filter((candidate) => candidate.id !== station.id)
+      .map((candidate) => ({ station: candidate, distanceKm: stationDistanceKm(station, candidate) }))
+      .filter((candidate) => Number.isFinite(candidate.distanceKm))
+      .sort((first, second) => first.distanceKm - second.distanceKm)
+      .slice(0, 12);
+
+    for (const candidate of candidates) {
+      if (!unresolved.size) break;
+      try {
+        const nearbyWeather = await weatherPayload(
+          candidate.station.id, period, dateText, startText, endText, true,
+        );
+        const nearbyByBucket = new Map((nearbyWeather.records || [])
+          .map((record) => [observationBucket(record.time, granularity), record]));
+        [...unresolved].forEach((key) => {
+          const separator = key.lastIndexOf('|');
+          const bucket = key.slice(0, separator);
+          const field = key.slice(separator + 1);
+          const nearby = nearbyByBucket.get(bucket);
+          const value = numericObservation(nearby?.[field]);
+          if (value == null) return;
+          const record = byBucket.get(bucket);
+          record[field] = value;
+          record._imputed = { ...(record._imputed || {}) };
+          record._imputed[field] = {
+            stationId: candidate.station.id,
+            stationName: candidate.station.name,
+            distanceKm: Math.round(candidate.distanceKm * 10) / 10,
+            sourceTime: nearby.time,
+          };
+          if (field === 'wind' && nearby.windDirection) {
+            record.windDirection = nearby.windDirection;
+            record._imputed.windDirection = record._imputed[field];
+          }
+          unresolved.delete(key);
+        });
+      } catch (error) {
+        console.warn(`補完候補 ${candidate.station.name} の観測値を取得できませんでした`, error);
+      }
+    }
+
+    const completed = [...byBucket.values()].sort((a, b) => String(a.time).localeCompare(String(b.time)));
+    return { records: completed, imputationSummary: imputationSummary(completed) };
+  }
+
+  async function weatherPayload(stationId, period, dateText, startText, endText, skipSupplement = false) {
     const stations = await stationsPayload();
     const station = stations.find((item) => item.id === stationId);
     if (!station) throw new Error('指定された観測所が見つかりません');
@@ -1626,9 +1917,18 @@ tbody tr:hover { background: #f6f8f2; }
       source = '気象庁 過去の気象データ検索'; granularity = '1日';
     } else throw new Error('期間指定が正しくありません');
 
+    let supplemented = { records, imputationSummary: [] };
+    if (!skipSupplement) {
+      supplemented = await supplementWeatherRecords({
+        station, stations, period, dateText, startText, endText,
+        rangeStart, rangeEnd, granularity, observedAt, records,
+      });
+    }
+
     return {
       station, period, anchor: isoDate(anchor), rangeStart: isoDate(rangeStart), rangeEnd: isoDate(rangeEnd), granularity,
-      observedAt: latest.current?.time || null, current: latest.current, records, historicalStation: historical,
+      observedAt: latest.current?.time || null, current: latest.current, records: supplemented.records, historicalStation: historical,
+      imputationSummary: supplemented.imputationSummary,
       source, notice: '観測値は速報値を含み、後日修正される場合があります。',
     };
   }
@@ -1646,7 +1946,7 @@ tbody tr:hover { background: #f6f8f2; }
     throw new Error('対応していないデータ要求です');
   }
 
-  globalThis.SaibaiDasStandalone = { request, version: '1.50' };
+  globalThis.SaibaiDasStandalone = { request, version: '1.55' };
 }());
 
 </script>
@@ -2320,15 +2620,35 @@ function calculateCultivationSummary(weather, station, start, requestedEnd, supp
   const normalized = SaibaiDasCultivationCore.normalizeDailyRecords(
     weather?.records || [], start, observedEnd, { fields: CULTIVATION_FIELDS },
   );
-  const records = normalized.records.map((record) => ({ ...record }));
+  const records = normalized.records.map((record) => ({
+    ...record,
+    _imputed: record?._imputed ? { ...record._imputed } : undefined,
+  }));
   const supplementedDays = new Set();
   const supplementedFields = new Set();
-  const supplementStations = [];
+  const supplementStationMap = new Map();
+  const trackSupplement = (record, field, source) => {
+    if (!source?.stationName) return;
+    supplementedDays.add(record.time);
+    supplementedFields.add(field);
+    const key = source.stationId || source.stationName;
+    const saved = supplementStationMap.get(key) || {
+      station: { id: source.stationId || '', name: source.stationName },
+      distanceKm: source.distanceKm,
+      suppliedCellCount: 0,
+    };
+    saved.suppliedCellCount += 1;
+    supplementStationMap.set(key, saved);
+  };
+  records.forEach((record) => {
+    Object.entries(record?._imputed || {}).forEach(([field, source]) => {
+      if (CULTIVATION_FIELDS.includes(field)) trackSupplement(record, field, source);
+    });
+  });
   (Array.isArray(supplements) ? supplements : []).forEach((supplement) => {
     if (!supplement?.weather) return;
     const supplementByDate = new Map((supplement.weather.records || [])
       .map((record) => [String(record.time || '').slice(0, 10), record]));
-    let suppliedCellCount = 0;
     records.forEach((record) => {
       const nearby = supplementByDate.get(String(record.time || '').slice(0, 10));
       if (!nearby) return;
@@ -2337,18 +2657,16 @@ function calculateCultivationSummary(weather, station, start, requestedEnd, supp
         const value = numericWeatherValue(nearby[field]);
         if (value == null) return;
         record[field] = value;
-        supplementedDays.add(record.time);
-        supplementedFields.add(field);
-        suppliedCellCount += 1;
+        const source = {
+          stationId: supplement.station.id,
+          stationName: supplement.station.name,
+          distanceKm: Math.round(supplement.distanceKm * 10) / 10,
+          sourceTime: nearby.time,
+        };
+        record._imputed = { ...(record._imputed || {}), [field]: source };
+        trackSupplement(record, field, source);
       });
     });
-    if (suppliedCellCount) {
-      supplementStations.push({
-        station: supplement.station,
-        distanceKm: supplement.distanceKm,
-        suppliedCellCount,
-      });
-    }
   });
   const finiteValues = (field) => records
     .map((record) => numericWeatherValue(record[field]))
@@ -2409,7 +2727,8 @@ function calculateCultivationSummary(weather, station, start, requestedEnd, supp
     expectedDays,
     supplementedDays: [...supplementedDays],
     supplementedFields: [...supplementedFields],
-    supplementStations,
+    supplementStations: [...supplementStationMap.values()],
+    records,
     missingCells,
     missingFields,
     unresolvedDays: [...new Set(unresolvedDays)],
@@ -3114,11 +3433,16 @@ async function loadWeather() {
       : '';
     const referenceNote = isActualReferenceDate() ? '' : ` · ${referenceDateText(referenceToday())}を今日として表示`;
     const previewNote = previewCount ? ` · 基準日後の実測 ${previewCount} 件は薄い参考表示（計算対象外）` : '';
+    const visibleMetric = state.detailMetric && state.detailMetric !== 'cultivation' ? state.detailMetric : null;
+    const visibleFields = visibleMetric ? new Set(metricObservationFields(visibleMetric)) : null;
+    const imputationCount = (state.weather?.imputationSummary || [])
+      .filter((item) => !visibleFields || visibleFields.has(item.field)).length;
+    const imputationNote = imputationCount ? ` · 欠損 ${imputationCount} 件は隣接観測地点で補完（表とグラフで赤く表示）` : '';
     const primaryUnavailable = weatherDataUnavailableMessage(null, state.weather);
     if (primaryUnavailable) {
       setStatus(`${primaryUnavailable} 利用できるほかの期間・項目は引き続き表示できます。`);
     } else {
-      setStatus(`${state.weather.source}から ${count} 件を計算対象として表示 · ${state.weather.notice}${capabilityNote}${referenceNote}${previewNote}`);
+      setStatus(`${state.weather.source}から ${count} 件を計算対象として表示 · ${state.weather.notice}${capabilityNote}${referenceNote}${previewNote}${imputationNote}`);
     }
     if (compareRequest) {
       const description = state.compareMode === 'stations'
@@ -3463,7 +3787,7 @@ function closeStationModal() {
 }
 
 function updateBodyLock() {
-  document.body.style.overflow = (!$('#referenceDateModal').hidden || !$('#aboutModal').hidden || !$('#stationModal').hidden || !$('#detailModal').hidden) ? 'hidden' : '';
+  document.body.style.overflow = (!$('#referenceDateModal').hidden || !$('#aboutModal').hidden || !$('#licenseModal').hidden || !$('#stationModal').hidden || !$('#detailModal').hidden) ? 'hidden' : '';
 }
 
 function openAboutModal() {
@@ -3476,6 +3800,18 @@ function closeAboutModal() {
   $('#aboutModal').hidden = true;
   updateBodyLock();
   $('#aboutOpen').focus();
+}
+
+function openLicenseModal() {
+  $('#licenseModal').hidden = false;
+  updateBodyLock();
+  requestAnimationFrame(() => $('#licenseClose').focus());
+}
+
+function closeLicenseModal() {
+  $('#licenseModal').hidden = true;
+  updateBodyLock();
+  $('#licenseInfoButton').focus();
 }
 
 function initMap() {
@@ -3899,17 +4235,26 @@ function detailDatasets(metric, weather, axisRecords) {
   const type = (metric === 'precipitation' || metric === 'sunshine') ? 'bar' : 'line';
   const pairedDataset = (label, key, color, options = {}) => {
     const previewData = referenceSeriesValues(axisRecords, key, true);
+    const baseBackground = options.backgroundColor ?? 'transparent';
+    const sourceAt = (context) => axisRecords[context.dataIndex]?._imputed?.[key] || null;
     const result = [{
       label,
       data: referenceSeriesValues(axisRecords, key, false),
       borderColor: color,
-      backgroundColor: options.backgroundColor ?? 'transparent',
+      backgroundColor: type === 'bar'
+        ? (context) => sourceAt(context) ? 'rgba(189,61,46,.82)' : baseBackground
+        : baseBackground,
       borderWidth: options.borderWidth ?? 1.3,
-      pointRadius: 0,
+      pointRadius: (context) => sourceAt(context) ? 3.5 : 0,
+      pointHoverRadius: (context) => sourceAt(context) ? 5 : 3,
+      pointBackgroundColor: '#bd3d2e',
+      pointBorderColor: '#fff',
+      pointBorderWidth: 1,
       fill: options.fill ?? false,
       tension: options.tension ?? .25,
       spanGaps: false,
       borderRadius: options.borderRadius,
+      _fieldKey: key,
     }];
     if (previewData.some((value) => value != null)) {
       result.push({
@@ -3974,7 +4319,13 @@ function createDetailChart(canvas, metric, weather, sharedScale = null) {
           caretSize: 6,
           callbacks: {
             title: (context) => detailTooltipTitle(context, axisRecords, weather),
-            label: (context) => `${context.dataset.label}: ${formatNumber(context.raw, config.digits)} ${config.unit}${context.dataset._referencePreview ? '（計算対象外）' : ''}`,
+            label: (context) => {
+              const source = axisRecords[context.dataIndex]?._imputed?.[context.dataset._fieldKey];
+              const suffix = context.dataset._referencePreview
+                ? '（計算対象外）'
+                : source?.stationName ? `（${source.stationName}の観測値で補完）` : '';
+              return `${context.dataset.label}: ${formatNumber(context.raw, config.digits)} ${config.unit}${suffix}`;
+            },
           },
         },
       },
@@ -4032,15 +4383,65 @@ function tableColumns(metric, weather = state.weather) {
   return columns;
 }
 
+const OBSERVATION_FIELD_LABELS = {
+  temperature: '平均気温',
+  temperatureMax: '最高気温',
+  temperatureMin: '最低気温',
+  precipitation: '降水量',
+  wind: '風速',
+  windDirection: '風向',
+  humidity: '湿度',
+  sunshine: '日照時間',
+  snow: '積雪深',
+  pressure: '気圧',
+};
+
+function metricObservationFields(metric) {
+  if (metric === 'temperature') return ['temperature', 'temperatureMax', 'temperatureMin'];
+  const config = METRICS[metric];
+  if (!config?.key) return [];
+  return [config.key, ...(metric === 'wind' ? ['windDirection'] : [])];
+}
+
+function imputationInfo(record, field) {
+  return record?._imputed?.[field] || null;
+}
+
+function imputationMessage(source) {
+  if (!source?.stationName) return '';
+  const distance = Number.isFinite(Number(source.distanceKm)) ? `（約${formatNumber(source.distanceKm, 1)}km）` : '';
+  return `データ欠損のため、${source.stationName}（観測値）のデータにて補完${distance}`;
+}
+
+function imputedTableCell(value, source = null) {
+  if (!source) return `<td>${escapeHtml(value ?? '--')}</td>`;
+  return `<td class="imputed-data-cell"><span class="imputed-data-value">${escapeHtml(value ?? '--')}</span><small class="imputed-data-note">${escapeHtml(imputationMessage(source))}</small></td>`;
+}
+
+function recordImputationNotes(record, fields = null) {
+  const includedFields = fields ? new Set(fields) : null;
+  const notes = Object.entries(record?._imputed || {})
+    .filter(([field]) => !includedFields || includedFields.has(field))
+    .map(([field, source]) => {
+    const label = OBSERVATION_FIELD_LABELS[field] || field;
+    return `${label}：${imputationMessage(source)}`;
+  });
+  return [...new Set(notes)].join('／');
+}
+
 function renderDetailTable(metric, records, weather = state.weather) {
   const columns = tableColumns(metric, weather);
   $('#detailTableHead').innerHTML = `<tr>${columns.map((column) => `<th>${escapeHtml(column.label)}</th>`).join('')}</tr>`;
-  $('#detailTableBody').innerHTML = records.length ? records.map((record) => `<tr class="${record._afterReference ? 'reference-future-row' : ''}"${record._afterReference ? ' title="基準日後の参考データ（計算対象外）"' : ''}>${columns.map((column) => {
+  $('#detailTableBody').innerHTML = records.length ? records.map((record) => {
+    const hasImputation = columns.some((column) => Boolean(imputationInfo(record, column.key)));
+    const rowClasses = [record._afterReference ? 'reference-future-row' : '', hasImputation ? 'imputed-data-row' : ''].filter(Boolean).join(' ');
+    return `<tr class="${rowClasses}"${record._afterReference ? ' title="基準日後の参考データ（計算対象外）"' : ''}>${columns.map((column) => {
     let value = record[column.key];
     if (column.format) value = column.format(value);
     else if (!column.raw) value = formatNumber(value, METRICS[metric].digits);
-    return `<td>${escapeHtml(value ?? '--')}</td>`;
-  }).join('')}</tr>`).join('') : '<tr><td colspan="4" style="text-align:center;padding:30px">表示できる観測データがありません。</td></tr>';
+    return imputedTableCell(value, imputationInfo(record, column.key));
+  }).join('')}</tr>`;
+  }).join('') : '<tr><td colspan="4" style="text-align:center;padding:30px">表示できる観測データがありません。</td></tr>';
 }
 
 function renderComparisonTable(metric, firstWeather, secondWeather) {
@@ -4072,28 +4473,30 @@ function renderComparisonTable(metric, firstWeather, secondWeather) {
     const second = secondRecords[index] || emptyRecord('');
     const firstDate = csvPeriodDate(first.time, firstWeather?.granularity === '1時間', firstWeather);
     const secondDate = csvPeriodDate(second.time, secondWeather?.granularity === '1時間', secondWeather);
-    const cells = [firstDate];
+    const cells = [{ value: firstDate, source: null }];
     if (metric === 'temperature') {
       cells.push(
-        formatNumber(first.temperature, config.digits),
-        formatNumber(first.temperatureMax, config.digits),
-        formatNumber(first.temperatureMin, config.digits),
+        { value: formatNumber(first.temperature, config.digits), source: imputationInfo(first, 'temperature') },
+        { value: formatNumber(first.temperatureMax, config.digits), source: imputationInfo(first, 'temperatureMax') },
+        { value: formatNumber(first.temperatureMin, config.digits), source: imputationInfo(first, 'temperatureMin') },
       );
-      if (showSecondDate) cells.push(secondDate);
+      if (showSecondDate) cells.push({ value: secondDate, source: null });
       cells.push(
-        formatNumber(second.temperature, config.digits),
-        formatNumber(second.temperatureMax, config.digits),
-        formatNumber(second.temperatureMin, config.digits),
+        { value: formatNumber(second.temperature, config.digits), source: imputationInfo(second, 'temperature') },
+        { value: formatNumber(second.temperatureMax, config.digits), source: imputationInfo(second, 'temperatureMax') },
+        { value: formatNumber(second.temperatureMin, config.digits), source: imputationInfo(second, 'temperatureMin') },
       );
     } else {
-      cells.push(formatNumber(first[config.key], config.digits));
-      if (metric === 'wind') cells.push(first.windDirection || '--');
-      if (showSecondDate) cells.push(secondDate);
-      cells.push(formatNumber(second[config.key], config.digits));
-      if (metric === 'wind') cells.push(second.windDirection || '--');
+      cells.push({ value: formatNumber(first[config.key], config.digits), source: imputationInfo(first, config.key) });
+      if (metric === 'wind') cells.push({ value: first.windDirection || '--', source: imputationInfo(first, 'windDirection') });
+      if (showSecondDate) cells.push({ value: secondDate, source: null });
+      cells.push({ value: formatNumber(second[config.key], config.digits), source: imputationInfo(second, config.key) });
+      if (metric === 'wind') cells.push({ value: second.windDirection || '--', source: imputationInfo(second, 'windDirection') });
     }
     const referenceFuture = first._afterReference || second._afterReference;
-    rows.push(`<tr class="${referenceFuture ? 'reference-future-row' : ''}"${referenceFuture ? ' title="基準日後の参考データ（計算対象外）"' : ''}>${cells.map((value) => `<td>${escapeHtml(value)}</td>`).join('')}</tr>`);
+    const hasImputation = cells.some((cell) => cell.source);
+    const rowClasses = [referenceFuture ? 'reference-future-row' : '', hasImputation ? 'imputed-data-row' : ''].filter(Boolean).join(' ');
+    rows.push(`<tr class="${rowClasses}"${referenceFuture ? ' title="基準日後の参考データ（計算対象外）"' : ''}>${cells.map((cell) => imputedTableCell(cell.value, cell.source)).join('')}</tr>`);
   }
   $('#detailTableBody').innerHTML = rows.length
     ? rows.join('')
@@ -4110,6 +4513,7 @@ function comparisonCsvRows(metric, firstWeather, secondWeather, quote) {
   const firstRecords = chartRecords(firstWeather?.records || [], firstWeather);
   const secondRecords = chartRecords(secondWeather?.records || [], secondWeather);
   const length = Math.max(firstRecords.length, secondRecords.length);
+  const metricFields = metricObservationFields(metric);
   const headers = [csvDateLabel(firstWeather)];
   if (metric === 'temperature') {
     headers.push(`${firstName} 平均`, `${firstName} 最高`, `${firstName} 最低`);
@@ -4122,6 +4526,7 @@ function comparisonCsvRows(metric, firstWeather, secondWeather, quote) {
     headers.push(`${secondName} ${config.name}`);
     if (metric === 'wind') headers.push(`${secondName} 風向`);
   }
+  headers.push(`${firstName} 補完情報`, `${secondName} 補完情報`);
   const rows = [headers.map(quote).join(',')];
   for (let index = 0; index < length; index += 1) {
     const first = firstRecords[index] || emptyRecord('');
@@ -4146,6 +4551,7 @@ function comparisonCsvRows(metric, firstWeather, secondWeather, quote) {
       cells.push(formatNumber(second[config.key], config.digits));
       if (metric === 'wind') cells.push(second.windDirection || '--');
     }
+    cells.push(recordImputationNotes(first, metricFields), recordImputationNotes(second, metricFields));
     rows.push(cells.map(quote).join(','));
   }
   return rows;
@@ -4174,9 +4580,12 @@ function downloadCsv() {
         format: (value) => csvPeriodDate(value, state.weather?.granularity === '1時間', state.weather),
       }
     : column);
-  const rows = [columns.map((column) => quote(column.label)).join(',')];
+  const rows = [[...columns.map((column) => column.label), '補完情報'].map(quote).join(',')];
   state.weather.records.forEach((record) => {
-    rows.push(columns.map((column) => quote(column.format ? column.format(record[column.key]) : record[column.key])).join(','));
+    rows.push([
+      ...columns.map((column) => column.format ? column.format(record[column.key]) : record[column.key]),
+      recordImputationNotes(record, columns.map((column) => column.key)),
+    ].map(quote).join(','));
   });
   const blob = new Blob([`\ufeff${rows.join('\r\n')}`], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
@@ -4292,6 +4701,8 @@ function printCurrentView() {
 function bindEvents() {
   $('#aboutOpen').addEventListener('click', openAboutModal);
   $('#aboutClose').addEventListener('click', closeAboutModal);
+  $('#licenseInfoButton').addEventListener('click', openLicenseModal);
+  $('#licenseClose').addEventListener('click', closeLicenseModal);
   $('#referenceDateButton').addEventListener('click', openReferenceDateModal);
   $('#referenceDateClose').addEventListener('click', () => closeReferenceDateModal());
   $('#referenceDateCancel').addEventListener('click', () => closeReferenceDateModal());
@@ -4395,6 +4806,7 @@ function bindEvents() {
     if (event.key === 'Escape') {
       if (!$('#detailMetricMenu').hidden) closeDetailMetricMenu();
       else if (!$('#referenceDateModal').hidden) closeReferenceDateModal();
+      else if (!$('#licenseModal').hidden) closeLicenseModal();
       else if (!$('#aboutModal').hidden) closeAboutModal();
       else if (!$('#stationModal').hidden) closeStationModal();
       else if (!$('#detailModal').hidden) closeDetail();
@@ -4406,6 +4818,7 @@ function bindEvents() {
   $('#referenceDateModal').addEventListener('click', (event) => { if (event.target === $('#referenceDateModal')) closeReferenceDateModal(); });
   $('#stationModal').addEventListener('click', (event) => { if (event.target === $('#stationModal')) closeStationModal(); });
   $('#aboutModal').addEventListener('click', (event) => { if (event.target === $('#aboutModal')) closeAboutModal(); });
+  $('#licenseModal').addEventListener('click', (event) => { if (event.target === $('#licenseModal')) closeLicenseModal(); });
 }
 
 async function init() {
